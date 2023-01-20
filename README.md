@@ -63,8 +63,8 @@ to discuss what you would like to change.
 Please make sure to update tests as appropriate.
 
 ## Credits
-[Bartosz Mielczarek](https://www.linkedin.com/in/bartosz-mielczarek-647346117)
-[Piotr Walkowski](https://www.linkedin.com/in/piotrwalkowski/)
+* [Bartosz Mielczarek](https://www.linkedin.com/in/bartosz-mielczarek-647346117)
+* [Piotr Walkowski](https://www.linkedin.com/in/piotrwalkowski/)
 
 
 ## License
