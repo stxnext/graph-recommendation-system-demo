@@ -8,7 +8,6 @@ files = ["Books.csv", "Users.csv", "Ratings.csv"]
 if __name__ == "__main__":
 
     for file in files:
-        # with open(MAIN_PATH / f"Short{file}", 'r') as csv_file:
         with open(MAIN_PATH / f"{file}", 'r') as csv_file:
             data = list(csv.reader(csv_file, delimiter=','))
 
@@ -49,7 +48,6 @@ if __name__ == "__main__":
                 for row in data
             ]
 
-        # with open(MAIN_PATH / f"clean_{file.lower()}", 'w') as csv_file:
         with open(MAIN_PATH / f"clean_full_{file.lower()}", 'w') as csv_file:
             writer = csv.writer(csv_file, delimiter=',')
             writer.writerows(data)
