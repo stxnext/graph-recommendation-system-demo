@@ -31,7 +31,7 @@ CONTAINER=$(docker run -d \
 )                  
 ```
 
-Of note: We use here 4.4 version due to not being stable (at 30.01) APOC version from 5. x. This might vary in future.
+*Of note: We use here 4.4 version due to not being stable (at 30.01) APOC version from 5. x. This might vary in future.*
 
 ### Setup
 Once Docker Container is up and running, create contents based on queries in `YOUR_DOCKER_NEO_LOCATION/db_loader.cypher` file.
@@ -96,25 +96,28 @@ How the process of embeddings (to temporary `book_titles` graph) looks like:
 
 ---
 
-## Results (see also our blog-post*)
+## Examples 
+```diff
+- TODO: See also our blog-post!
+```
 
-**temp ->** [link to STX blogpost here](https://docs.google.com/document/d/1AJ7Gm_Lc-wcRb_IXm1GvShT6c2yQ8Q0csD_6vLwYDLA/edit#) for more (TODO: or copy-paste here)
+- [link to STX blogpost here](https://docs.google.com/document/d/1AJ7Gm_Lc-wcRb_IXm1GvShT6c2yQ8Q0csD_6vLwYDLA/edit#) for more (TODO: or copy-paste here)
 
 Graph-based recommendations give us *a very powerful* tool to search by different criteria. Where our imagination is the limit.
 
-* Finding recommendations based on User criteria
+* ### Finding recommendations based on User criteria
 
 Results of recommendation for a specific user (in this case Patti Jacobs)
 ![All recommendations to user "Patti Jacobs"](assets/img/patti_jacobs_recommendations.png)
 
-* Overlapping sets 
+* ### Overlapping sets 
 
 List of readers that loves *"pride & prejudice"* to check what they have in common:
 ![Recommendation based on most popular](assets/img/pride_1.png)
 For [results CSV](assets/pride_recommendations.csv) 
 
 
-* Recommendations based on popularity
+* ### Recommendations based on popularity
 
 What are the best guesses for top-5 book readers?
 Below the cypher, sub-query obtaining first part 
@@ -125,7 +128,7 @@ Full query showing all recommendations
 For [results CSV](assets/most_popular_books_by_reads.csv)
 
 
-* Recommendation on any criteria
+* ### Recommendation on any criteria
 
 Here make the limitation to only readers based on `US` that have already rated books published after `1984`!
 
