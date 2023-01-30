@@ -13,47 +13,65 @@ pip3 install poetry --no-cache
 poetry install
 ```
 
-## Usage
-
-Unzip `data.zip` file to the main directory and copy contents of `import_bckp` to `import folder` in the same directory.
-
-Once the data is in place run Docker command.
-
+Now build desired `neo4j` container.
 ```dockerfile
-CONTAINER=$(docker run \                                          
-    --name testneo4j \
-    -p7474:7474 -p7687:7687 \
-    -d \
+CONTAINER=$(docker run -d \
+    -p 7474:7474 -p 7687:7687 \
     -v $(pwd)/data/neo4j_db/data:/data \
-    -v $(pwd)/data/neo4j_db/logs:/logs \
-    -v $(pwd)/data/neo4j_db/import:/var/lib/neo4j/import \
-    -v $(pwd)/data/neo4j_db/plugins:/plugins \
-    --env NEO4J_AUTH=neo4j/test_password \
-    --env NEO4JLABS_PLUGINS='["graph-data-science", "apoc"]' \
-    neo4j:latest)              
+	-v $(pwd)/data/neo4j_db/logs:/logs \
+	-v $(pwd)/data/neo4j_db/import:/var/lib/neo4j/import \
+    --name test-neo4j-stx-books-recommender44 \
+    -e NEO4J_apoc_export_file_enabled=true \
+    -e NEO4J_apoc_import_file_enabled=true \
+    -e NEO4J_apoc_import_file_use__neo4j__config=true \
+    -e NEO4J_AUTH=neo4j/stx_books_pass \
+	-e NEO4JLABS_PLUGINS='["apoc", "graph-data-science"]' \
+	-e NEO4J_ACCEPT_LICENSE_AGREEMENT=yes \
+	neo4j:4.4-enterprise
+)                  
 ```
 
+Of note: We use here 4.4 version due not stable (at 30.01) APOC version from 5.x. This might very in future.
+
 ### Setup
-Once Docker Container is up and running, create contents based on queries in `db_loader.cypher` file.
+Once Docker Container is up and running, create contents based on queries in `YOUR_DOCKER_NEO_LOCATION/db_loader.cypher` file.
 You have few options:
-1. _(Easy-mode)_ You can run them in [browser](http://localhost:7474/browser) and copy paster.
+1. _(Easy-mode)_ You can run them in [browser](http://localhost:7474/browser) and just copy-paste.
 2. Within terminal run ->
 
-`$ docker exec $CONTAINER /var/lib/neo4j/bin/neo4j-shell -f /var/lib/neo4j/db_loader.cypher`
+`$ docker exec $CONTAINER /var/lib/neo4j/bin/neo4j-shell -f YOUR_DOCKER_NEO_LOCATION/db_loader.cypher`
 
-or for interactive mode
+or for interactive mode... (to copy-paste like in browser)
 
 `$ docker exec -ti $CONTAINER /var/lib/neo4j/bin/neo4j-shell`
 
+#### Important! (ML Flow setup)
+
+Prior running your code you need to define all variables stored in `.env`. 
+
+
+Especially:
+```commandline
+MLFLOW_USER=
+MLFLOW_PASSWORD=
+MLFLOW_URL=
+```
+
+So either use your own **MLFlow** account or use own dockerized one.
+
+
+### Running
 Then run following code in the terminal for training model and creating a new `RECOMMENDED_TO` relationship.
 
+
 ```bash
-python recommendations/main.py
+python3 main.py
 ```
 
 ---
 Pulling data from Neo4j and loading results to Neo4j are made with the use of `["graph-data-science", "apoc"]` plugins.
-Example of new mapping can be found in `results.txt` file, but it is not updated after new training.
+
+For a visualisation - an example of new mapping can be found in `sample/results.txt` file, but it is not updated after new training.
 
 ## Contributing
 
