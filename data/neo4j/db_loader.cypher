@@ -22,6 +22,8 @@ CREATE (:Titles {
 LOAD CSV WITH HEADERS FROM 'file:///clean_users.csv' AS line
 CREATE (:Users {
     user: toInteger(line.`User-ID`),
+    first_name: line.first_name,
+    last_name: line.first_name,
     location: line.Location,
     age: toInteger(line.Age)
 	}
@@ -73,4 +75,3 @@ MATCH (t:Titles)
 MATCH (y:YearsOfPublication)
 WHERE t.year_of_publication = y.year_of_publication
 MERGE (t)-[tp:WRITTEN_IN_YEAR]->(y);
-
