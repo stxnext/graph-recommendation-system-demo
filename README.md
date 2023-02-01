@@ -109,6 +109,9 @@ Graph-based recommendations give us *a very powerful* tool to search by differen
 
 Results of recommendation for a specific user (in this case Patti Jacobs)
 ![All recommendations to user "Patti Jacobs"](assets/img/patti_jacobs_recommendations.png)
+```cypher
+MATCH paths=(u: Users {first_name: 'Patti', last_name: 'Jacobs'})-[:RECOMMENDED_TO]->(t:Titles) RETURN paths;
+```
 
 * ### Overlapping sets 
 
@@ -116,6 +119,12 @@ List of readers that loves *"pride & prejudice"* to check what they have in comm
 ![Recommendation based on most popular](assets/img/pride_1.png)
 For [results CSV](assets/pride_recommendations.csv) 
 
+```cypher
+MATCH (romance_lovers:Users)-[:READ_BY]->(n:Titles) WHERE n.title = 'Pride and Prejudice'
+MATCH (other_book:Titles)-[:RECOMMENDED_T0]->(romance_lovers:Users)
+WHERE id(other_book) <> id(n)
+RETURN other_book.author AS author, other_book.title AS title;
+```
 
 * ### Recommendations based on popularity
 
@@ -127,6 +136,20 @@ Full query showing all recommendations
 ![Most popular - graph](assets/img/top_based_on_most_popular.png)
 For [results CSV](assets/most_popular_books_by_reads.csv)
 
+```cypher
+CALL {
+  MATCH (users:Users)-[:READ_BY]->(n:Titles)
+  WITH COUNT(n) AS counter, n, COLLECT(id(users)) AS user_ids
+  RETURN n.title, counter, user_ids
+  ORDER BY counter DESC
+  LIMIT 5
+}
+WITH user_ids
+UNWIND user_ids AS user_id
+MATCH (u:Users {user:user_id})-[:RECOMMENDED_TO]->(t2:Titles)
+RETURN t2
+LIMIT 10;
+```
 
 * ### Recommendation on any criteria
 
@@ -135,6 +158,19 @@ Here make the limitation to only readers based on `US` that have already rated b
 ![Recommended after 84'](assets/img/recommended_us_after_1984.png)
 For [results CSV](assets/recommended_after_84.csv)
 
+```cypher
+CALL {
+  MATCH (u:Users)-[r:RATED_BY]->(t:Titles)
+  WITH lTrim(split(u. location, ',')[-1]) AS location, t, u
+  WHERE Location - 'usa' AND t.year_of_publication > 1984
+  RETURN t, u
+  LIMIT 10
+}
+WITH u
+MATCH (u)<-[:RECOMMENDED_TO]-(t2:Titles)
+RETURN t2.author AS recommended_author, t2.title AS recommended_title
+LIMIT 5;
+```
 
 ## Next steps
 Pulling data from Neo4j and loading results to Neo4j are made with the use of `["graph-data-science", "apoc"]` plugins.
