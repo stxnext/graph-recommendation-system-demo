@@ -60,6 +60,7 @@ So either uses your own **MLFlow** account or use your dockerized one.
 
 ---
 ### Data schema
+
 After proper data population within the graph database there should be visible following schema:
 ![Database Schema](assets/img/schemat.png)
 Or you can try by yourself by calling 
@@ -75,6 +76,11 @@ CALL db.schema.visualization()
 
 
 More detailed schema (with specific indices in `csv` view) can be read [here](assets/full_schema_prior_mapping.csv) 
+
+### Dataset source
+Our dataset comes from [Kaggle Dataset](https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset)
+It was modified limited to 50k and for readability by adding fixtures to *Users* (first name, last name) by [faker](https://github.com/joke2k/faker) so that *any similarity to real person is pure coincidence* :)
+
 
 ### Running
 Then run the following code in the terminal for the training model and create a new `RECOMMENDED_TO` relationship. 
